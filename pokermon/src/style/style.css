@@ -1,0 +1,15 @@
+.text {
+  color: white;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.btn {
+  border-color: white;
+}
+
+.btn-disabled {
+  border-color: red;
+}
