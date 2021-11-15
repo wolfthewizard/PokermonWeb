@@ -1,5 +1,4 @@
 import { Tooltip, Typography } from "@mui/material";
-import { Box } from "@mui/system";
 
 const cardRanks = [
   "2",
@@ -36,7 +35,11 @@ const PlayingCard = ({ number }) => {
         )
       }
     >
-      <img style={{ width: 100 }} src={`/playing_cards/${fileName}`} />
+      <img
+        style={{ width: 100 }}
+        src={`/playing_cards/${fileName}`}
+        alt={fileName}
+      />
     </Tooltip>
   );
 };

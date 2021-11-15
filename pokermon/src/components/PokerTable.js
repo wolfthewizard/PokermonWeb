@@ -48,7 +48,7 @@ const PokerTable = ({ players, cards }) => {
                   currentCash={player.currentCash}
                   currentBet={player.currentBet}
                   wonCash={player.wonCash}
-                  pocketCards
+                  pocketCards={player.pocketCards}
                   key={i}
                 />
               </Grid>

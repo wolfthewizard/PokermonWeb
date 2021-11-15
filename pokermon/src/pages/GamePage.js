@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -88,7 +88,7 @@ const GamePage = () => {
   const params = useParams();
   const gameId = params.gameId;
 
-  const [gameData, setGameData] = useState({ players: [] });
+  const [gameData, setGameData] = useState({ tableCards: [], players: [] });
 
   const refreshGameData = () => {
     setGameData(mockedGameResponse);
