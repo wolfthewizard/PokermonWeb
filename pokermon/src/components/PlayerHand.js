@@ -25,7 +25,7 @@ const PlayerHand = ({
       ) : (
         <Typography className="text">bet: {currentBet}</Typography>
       )}
-      {!isPlaying && <Typography className="text">PASS</Typography>}
+      {!isPlaying && <Typography className="text">FOLD</Typography>}
       {isAllIn && <Typography className="text">ALL IN</Typography>}
       <Box>
         <PlayingCard number={pocketCards[0]} />

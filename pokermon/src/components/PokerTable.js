@@ -16,16 +16,11 @@ const PokerTable = ({ players, cards }) => {
       <Box style={{ width: "80%" }}>
         <Grid container>
           {players.slice(0, 4).map((player, i) => (
-            <Grid item xs={3}>
+            <Grid item xs={3} key={i}>
               <PlayerInfo
                 index={i}
                 isPlaying={player.isPlaying}
-                isAllIn={player.isAllIn}
                 currentCash={player.currentCash}
-                currentBet={player.currentBet}
-                wonCash={player.wonCash}
-                pocketCards={player.pocketCards}
-                key={i}
               />
             </Grid>
           ))}
@@ -40,7 +35,7 @@ const PokerTable = ({ players, cards }) => {
         >
           <Grid container>
             {players.slice(0, 4).map((player, i) => (
-              <Grid item xs={3}>
+              <Grid item xs={3} key={i}>
                 <PlayerHand
                   index={i}
                   isPlaying={player.isPlaying}
@@ -49,7 +44,6 @@ const PokerTable = ({ players, cards }) => {
                   currentBet={player.currentBet}
                   wonCash={player.wonCash}
                   pocketCards={player.pocketCards}
-                  key={i}
                 />
               </Grid>
             ))}
@@ -62,8 +56,8 @@ const PokerTable = ({ players, cards }) => {
             direction="column"
           >
             <Box>
-              {cards.map((cardNum) => (
-                <PlayingCard number={cardNum} />
+              {cards.map((cardNum, i) => (
+                <PlayingCard number={cardNum} key={i} />
               ))}
             </Box>
           </Grid>
@@ -72,7 +66,7 @@ const PokerTable = ({ players, cards }) => {
               .slice(4, 8)
               .reverse()
               .map((player, i) => (
-                <Grid item xs={3}>
+                <Grid item xs={3} key={i}>
                   <PlayerHand
                     index={7 - i}
                     isPlaying={player.isPlaying}
@@ -81,7 +75,6 @@ const PokerTable = ({ players, cards }) => {
                     currentBet={player.currentBet}
                     wonCash={player.wonCash}
                     pocketCards
-                    key={i}
                   />
                 </Grid>
               ))}
@@ -92,16 +85,11 @@ const PokerTable = ({ players, cards }) => {
             .slice(4, 8)
             .reverse()
             .map((player, i) => (
-              <Grid item xs={3}>
+              <Grid item xs={3} key={i}>
                 <PlayerInfo
                   index={7 - i}
                   isPlaying={player.isPlaying}
-                  isAllIn={player.isAllIn}
                   currentCash={player.currentCash}
-                  currentBet={player.currentBet}
-                  wonCash={player.wonCash}
-                  pocketCards
-                  key={i}
                 />
               </Grid>
             ))}
