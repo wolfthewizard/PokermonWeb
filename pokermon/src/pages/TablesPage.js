@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import "../style/style.css";
 import { getAxiosInstance } from "../axios";
 import { useCookies } from "react-cookie";
+import { makeStyles } from "@mui/styles";
 
 const mockedTableList = [
   { id: 0, name: "table1", players: 3 },
@@ -28,11 +29,40 @@ const mockedTableList = [
   { id: 3, name: "table4", players: 0 },
 ];
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& .MuiFormLabel-root": {
+      color: "white",
+    },
+    "& label.Mui-focused": {
+      color: "white",
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "white",
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: "white",
+      },
+      "&:hover fieldset": {
+        borderColor: "white",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "white",
+      },
+    },
+  },
+}));
+
 const TablePage = () => {
+  const classes = useStyles();
   const navigate = useNavigate();
   const [openTables, setOpenTables] = useState([]);
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const [addedTableName, setAddedTableName] = useState("");
+  const [tableNameFilter, setTableNameFilter] = useState("");
+  const [filterQueryId, setFilterQueryId] = useState(0);
+  const [rawFilterQuery, setRawFilterQuery] = useState("");
   const setCookie = useCookies([])[1];
 
   const refreshOpenTables = () => {
@@ -47,6 +77,26 @@ const TablePage = () => {
   };
 
   useEffect(refreshOpenTables, []);
+
+  useEffect(() => {
+    const startingFilterQueryId = filterQueryId;
+    const rawFilterQuery = tableNameFilter;
+    setFilterQueryId((prevFilterQueryId) => prevFilterQueryId + 1);
+    setTimeout(() => {
+      if (startingFilterQueryId === filterQueryId) {
+        setRawFilterQuery(rawFilterQuery);
+      }
+    }, 500);
+  }, [tableNameFilter]);
+
+  const filterQueries = rawFilterQuery
+    .replace(/\s+/g, " ")
+    .trim()
+    .split(" ")
+    .map((filterPart) => filterPart.toLowerCase());
+  const filteredTables = openTables.filter((tab) =>
+    filterQueries.every((fq) => tab.name.toLowerCase().includes(fq))
+  );
 
   return (
     <Box
@@ -79,27 +129,34 @@ const TablePage = () => {
           >
             Create Table
           </Button>
+          <TextField
+            onChange={({ target: { value } }) => setTableNameFilter(value)}
+            label="Filter"
+            variant="outlined"
+            className={classes.root}
+            inputProps={{ style: { color: "white" } }}
+          />
           <Button variant="contained" onClick={refreshOpenTables}>
             Refresh Tables
           </Button>
         </Box>
-        <TableContainer component={Paper}>
-          <Table style={{ opacity: 0.8 }}>
+        <TableContainer component={Paper} style={{ opacity: 0.8 }}>
+          <Table>
             <TableHead />
             <TableBody style={{ backgroundColor: "#404040" }}>
-              {openTables.map((tableObj, index) => {
+              {filteredTables.map((tableObj, index) => {
                 const buttonDisabled = tableObj.players === 8;
                 return (
                   <TableRow key={index}>
-                    <TableCell align="center">
+                    <TableCell align="center" style={{ borderBottom: "none" }}>
                       <Typography className="text">{tableObj.name}</Typography>
                     </TableCell>
-                    <TableCell className="text" align="center">
+                    <TableCell align="center" style={{ borderBottom: "none" }}>
                       <Typography className="text">
                         {tableObj.players}/8 players
                       </Typography>
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="center" style={{ borderBottom: "none" }}>
                       <Button
                         style={
                           buttonDisabled
