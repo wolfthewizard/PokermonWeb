@@ -12,13 +12,14 @@ const PlayerHand = ({
   currentBet,
   wonCash,
   pocketCards,
+  reverse,
 }) => {
   return (
     <Grid
       container
       alignItems="center"
       justifyContent="center"
-      direction="column"
+      direction={reverse ? "column" : "column-reverse"}
     >
       {wonCash !== null && wonCash !== undefined ? (
         <Typography className="text">won: {wonCash}</Typography>

@@ -15,9 +15,9 @@ const cardRanks = [
   "King",
   "Ace",
 ];
-const cardSuits = ["poke", "great", "ultra", "master"];
+const cardSuits = ["Poke", "Great", "Ultra", "Master"];
 
-const PlayingCard = ({ number }) => {
+const PlayingCard = ({ number, size }) => {
   const isUncovered = number !== undefined && number !== null;
   const suit = Math.floor(number / 13);
   const rank = number % 13;
@@ -36,7 +36,7 @@ const PlayingCard = ({ number }) => {
       }
     >
       <img
-        style={{ width: 100 }}
+        style={{ width: size || 80 }}
         src={`/playing_cards/${fileName}`}
         alt={fileName}
       />

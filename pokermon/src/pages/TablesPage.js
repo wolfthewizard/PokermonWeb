@@ -32,7 +32,7 @@ const mockedTableList = [
 const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiFormLabel-root": {
-      color: "white",
+      color: "gray",
     },
     "& label.Mui-focused": {
       color: "white",

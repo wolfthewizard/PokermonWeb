@@ -1,26 +1,28 @@
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import PlayerHand from "./PlayerHand";
 import PlayerInfo from "./PlayerInfo";
 import PlayingCard from "./PlayingCard";
 
-const PokerTable = ({ players, cards }) => {
+const PokerTable = ({ players, cards, currentPlayerPosition, potValue }) => {
   return (
     <Grid
       container
       alignItems="center"
       justifyContent="center"
       direction="column"
+      style={{ marginTop: 20 }}
     >
-      <Box style={{ width: "80%" }}>
-        <Grid container>
+      <Box style={{ width: "100%" }}>
+        <Grid container style={{ marginBottom: 10 }}>
           {players.slice(0, 4).map((player, i) => (
             <Grid item xs={3} key={i}>
               <PlayerInfo
                 index={i}
                 isPlaying={player.isPlaying}
                 currentCash={player.currentCash}
+                isOwnTurn={currentPlayerPosition === i}
               />
             </Grid>
           ))}
@@ -54,13 +56,18 @@ const PokerTable = ({ players, cards }) => {
             alignItems="center"
             justifyContent="center"
             direction="column"
+            style={{ marginTop: 40, marginBottom: 8 }}
           >
             <Box>
               {cards.map((cardNum, i) => (
                 <PlayingCard number={cardNum} key={i} />
               ))}
             </Box>
+            <Typography className="text" style={{ fontSize: 32 }}>
+              {potValue ? `Pot: ${potValue}` : "⠀"}
+            </Typography>
           </Grid>
+
           <Grid container>
             {players
               .slice(4, 8)
@@ -74,13 +81,14 @@ const PokerTable = ({ players, cards }) => {
                     currentCash={player.currentCash}
                     currentBet={player.currentBet}
                     wonCash={player.wonCash}
-                    pocketCards
+                    pocketCards={player.pocketCards}
+                    reverse
                   />
                 </Grid>
               ))}
           </Grid>
         </Box>
-        <Grid container>
+        <Grid container style={{ marginTop: 10 }}>
           {players
             .slice(4, 8)
             .reverse()
@@ -90,6 +98,7 @@ const PokerTable = ({ players, cards }) => {
                   index={7 - i}
                   isPlaying={player.isPlaying}
                   currentCash={player.currentCash}
+                  isOwnTurn={currentPlayerPosition === 7 - i}
                 />
               </Grid>
             ))}
