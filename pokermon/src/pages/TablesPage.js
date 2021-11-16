@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Dialog,
@@ -60,8 +60,7 @@ const TablePage = () => {
   const [openTables, setOpenTables] = useState([]);
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const [addedTableName, setAddedTableName] = useState("");
-  const [tableNameFilter, setTableNameFilter] = useState("");
-  const [filterQueryId, setFilterQueryId] = useState(0);
+  const filterQueryId = useRef(0);
   const [rawFilterQuery, setRawFilterQuery] = useState("");
   const setCookie = useCookies([])[1];
 
@@ -78,16 +77,16 @@ const TablePage = () => {
 
   useEffect(refreshOpenTables, []);
 
-  useEffect(() => {
-    const startingFilterQueryId = filterQueryId;
-    const rawFilterQuery = tableNameFilter;
-    setFilterQueryId((prevFilterQueryId) => prevFilterQueryId + 1);
+  const handleTableFilterChange = (newTableFilter) => {
+    const rawFilterQuery = newTableFilter;
+    filterQueryId.current++;
+    const startingFilterQueryId = filterQueryId.current;
     setTimeout(() => {
-      if (startingFilterQueryId === filterQueryId) {
+      if (startingFilterQueryId === filterQueryId.current) {
         setRawFilterQuery(rawFilterQuery);
       }
     }, 500);
-  }, [tableNameFilter]);
+  };
 
   const filterQueries = rawFilterQuery
     .replace(/\s+/g, " ")
@@ -130,7 +129,7 @@ const TablePage = () => {
             Create Table
           </Button>
           <TextField
-            onChange={({ target: { value } }) => setTableNameFilter(value)}
+            onChange={({ target: { value } }) => handleTableFilterChange(value)}
             label="Filter"
             variant="outlined"
             className={classes.root}
