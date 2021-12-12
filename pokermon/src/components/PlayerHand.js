@@ -5,10 +5,8 @@ import "../style/style.css";
 import PlayingCard from "./PlayingCard";
 
 const PlayerHand = ({
-  index,
   isPlaying,
   isAllIn,
-  currentCash,
   currentBet,
   wonCash,
   pocketCards,

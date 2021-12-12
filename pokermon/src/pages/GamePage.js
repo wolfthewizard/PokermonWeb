@@ -1,5 +1,4 @@
 import { Button, Grid } from "@mui/material";
-import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ControlPanel from "../components/ControlPanel";
@@ -11,7 +10,7 @@ const mockedPlayerList = [
   {
     isPlaying: true,
     isAllIn: false,
-    currentCash: 2137,
+    currentCash: 1200,
     currentBet: 300,
     wonCash: null,
     pocketCards: [],
@@ -19,7 +18,7 @@ const mockedPlayerList = [
   {
     isPlaying: true,
     isAllIn: false,
-    currentCash: 2137,
+    currentCash: 1200,
     currentBet: 300,
     wonCash: null,
     pocketCards: [],
@@ -27,7 +26,7 @@ const mockedPlayerList = [
   {
     isPlaying: true,
     isAllIn: false,
-    currentCash: 2137,
+    currentCash: 1200,
     currentBet: 300,
     wonCash: null,
     pocketCards: [],
@@ -35,7 +34,7 @@ const mockedPlayerList = [
   {
     isPlaying: true,
     isAllIn: false,
-    currentCash: 2137,
+    currentCash: 1200,
     currentBet: 300,
     wonCash: null,
     pocketCards: [],
@@ -43,7 +42,7 @@ const mockedPlayerList = [
   {
     isPlaying: true,
     isAllIn: false,
-    currentCash: 2137,
+    currentCash: 1200,
     currentBet: 300,
     wonCash: null,
     pocketCards: [],
@@ -51,7 +50,7 @@ const mockedPlayerList = [
   {
     isPlaying: true,
     isAllIn: false,
-    currentCash: 2137,
+    currentCash: 1200,
     currentBet: 300,
     wonCash: null,
     pocketCards: [],
@@ -59,7 +58,7 @@ const mockedPlayerList = [
   {
     isPlaying: true,
     isAllIn: false,
-    currentCash: 2137,
+    currentCash: 1200,
     currentBet: 300,
     wonCash: null,
     pocketCards: [],
@@ -67,7 +66,7 @@ const mockedPlayerList = [
   {
     isPlaying: true,
     isAllIn: false,
-    currentCash: 2137,
+    currentCash: 1200,
     currentBet: 300,
     wonCash: null,
     pocketCards: [],
@@ -90,6 +89,9 @@ const GamePage = () => {
   const params = useParams();
   const gameId = params.gameId;
 
+  const [cookies, _, removeCookie] = useCookies([]);
+  const playerId = cookies["pokermon-uuid"];
+  const tablePosition = cookies["pokermon-table-position"];
   const [gameData, setGameData] = useState({
     tableCards: [],
     players: [],
@@ -97,15 +99,33 @@ const GamePage = () => {
     potValue: null,
     pocketCards: [],
   });
-  const [cookies, _, removeCookie] = useCookies([]);
-  const playerId = cookies["pokermon-uuid"];
-  const tablePosition = cookies["pokermon-table-position"];
 
   const refreshGameData = () => {
     setGameData(mockedGameResponse);
+    // getAxiosInstance()
+    //     .get(
+    //       `/api/game/${gameId}`,
+    //       {},
+    //       {
+    //         headers: {
+    //           playerId: playerId,
+    //         },
+    //       }
+    //     )
+    //     .then(({ data }) => {
+    //       console.log(data);
+    //     })
+    //     .catch((error) =>
+    //       console.log(`an error occured while refreshing game page: ${error}`)
+    //     );
   };
 
   useEffect(refreshGameData, []);
+
+  useEffect(() => {
+    const id = setInterval(refreshGameData, 1000);
+    return () => clearInterval(id);
+  });
 
   return (
     <Grid container>
@@ -119,9 +139,19 @@ const GamePage = () => {
       </Grid>
       <Grid xs={4}>
         <ControlPanel
+          playerId={playerId}
+          gameId={gameId}
           pocketCards={gameData.pocketCards}
-          yourTurn={true}
+          yourTurn={gameData.currentPlayerPosition === tablePosition}
           turnPlayerName={gameData.players[gameData.currentPlayerPosition]}
+          currentCash={gameData.players[tablePosition]?.currentCash}
+          currentBet={gameData.players[tablePosition]?.currentBet}
+          cashToCall={gameData.cashToCall}
+          disabled={
+            gameData.currentPlayerPosition !== tablePosition ||
+            !gameData.players[tablePosition]?.isPlaying ||
+            !gameData.players[tablePosition]?.isAllIn
+          }
         />
         <Grid
           container

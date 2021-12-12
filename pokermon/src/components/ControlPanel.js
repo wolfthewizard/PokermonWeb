@@ -4,6 +4,7 @@ import "../style/style.css";
 import { Box } from "@mui/system";
 import PlayingCard from "./PlayingCard";
 import { makeStyles } from "@mui/styles";
+import { getAxiosInstance } from "../axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,12 +32,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ControlPanel = ({
+  playerId,
+  gameId,
   pocketCards,
   disabled,
   cashToCall,
   canRaise,
   yourTurn,
   turnPlayerName,
+  currentCash,
+  currentBet,
 }) => {
   const classes = useStyles();
   const [betAmountString, setBetAmountString] = useState("");
@@ -58,12 +63,20 @@ const ControlPanel = ({
       >
         <Box>
           <Typography style={{ color: "white", fontSize: 24 }}>
-            {yourTurn ? "Your Turn" : `${turnPlayerName}'s turn'`}
+            {yourTurn ? "Your Turn" : `${turnPlayerName}'s turn`}
           </Typography>
         </Box>
-        <Box style={{ paddingBottom: 40 }}>
+        <Box style={{ paddingBottom: 10 }}>
           <PlayingCard number={pocketCards[0]} size={160} />
           <PlayingCard number={pocketCards[1]} size={160} />
+        </Box>
+        <Box style={{ paddingBottom: 30 }}>
+          <Typography style={{ color: "white", fontSize: 16 }}>
+            Your cash: {currentCash}
+          </Typography>
+          <Typography style={{ color: "white", fontSize: 16 }}>
+            Your bet: {currentBet}
+          </Typography>
         </Box>
         <Box>
           <Typography style={{ color: "white" }}>
@@ -83,18 +96,61 @@ const ControlPanel = ({
             variant="contained"
             className="text"
             style={{ height: "100%" }}
+            onClick={() =>
+              getAxiosInstance().post(
+                `/api/game/bet/${gameId}`,
+                {
+                  value: parseInt(betAmountString),
+                },
+                {
+                  headers: {
+                    playerId,
+                  },
+                }
+              )
+            }
           >
             Bet
           </Button>
         </Box>
         <Grid container alignItems="center" justifyContent="center" spacing={2}>
           <Grid item>
-            <Button disabled={disabled} variant="contained" className="text">
+            <Button
+              disabled={disabled}
+              variant="contained"
+              className="text"
+              onClick={() =>
+                getAxiosInstance().post(
+                  `/api/game/fold/${gameId}`,
+                  {},
+                  {
+                    headers: {
+                      playerId,
+                    },
+                  }
+                )
+              }
+            >
               Fold
             </Button>
           </Grid>
           <Grid item>
-            <Button disabled={disabled} variant="contained" className="text">
+            <Button
+              disabled={disabled}
+              variant="contained"
+              className="text"
+              onClick={() =>
+                getAxiosInstance().post(
+                  `/api/game/check/${gameId}`,
+                  {},
+                  {
+                    headers: {
+                      playerId,
+                    },
+                  }
+                )
+              }
+            >
               Check
             </Button>
           </Grid>

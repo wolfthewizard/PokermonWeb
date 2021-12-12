@@ -23,6 +23,7 @@ const PokerTable = ({ players, cards, currentPlayerPosition, potValue }) => {
                 isPlaying={player.isPlaying}
                 currentCash={player.currentCash}
                 isOwnTurn={currentPlayerPosition === i}
+                isPresent={player !== null && player !== undefined}
               />
             </Grid>
           ))}
@@ -99,6 +100,7 @@ const PokerTable = ({ players, cards, currentPlayerPosition, potValue }) => {
                   isPlaying={player.isPlaying}
                   currentCash={player.currentCash}
                   isOwnTurn={currentPlayerPosition === 7 - i}
+                  isPresent={player !== null && player !== undefined}
                 />
               </Grid>
             ))}

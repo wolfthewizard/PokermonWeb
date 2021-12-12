@@ -2,7 +2,13 @@ import { Grid, Typography } from "@mui/material";
 import React from "react";
 import "../style/style.css";
 
-const PlayerInfo = ({ index, isPlaying, currentCash, isOwnTurn }) => {
+const PlayerInfo = ({
+  index,
+  isPlaying,
+  currentCash,
+  isOwnTurn,
+  isPresent,
+}) => {
   return (
     <Grid
       container
@@ -18,9 +24,9 @@ const PlayerInfo = ({ index, isPlaying, currentCash, isOwnTurn }) => {
       }
     >
       <Typography className="text" style={{ fontWeight: "bold" }}>
-        Player{index}
+        {isPresent && `Player${index}`}
       </Typography>
-      <Typography className="text">{currentCash}</Typography>
+      <Typography className="text">{isPresent && currentCash}</Typography>
     </Grid>
   );
 };
