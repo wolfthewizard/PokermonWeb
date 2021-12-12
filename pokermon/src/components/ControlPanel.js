@@ -39,7 +39,7 @@ const ControlPanel = ({
   cashToCall,
   canRaise,
   yourTurn,
-  turnPlayerName,
+  turnPlayerIndex,
   currentCash,
   currentBet,
 }) => {
@@ -63,12 +63,12 @@ const ControlPanel = ({
       >
         <Box>
           <Typography style={{ color: "white", fontSize: 24 }}>
-            {yourTurn ? "Your Turn" : `${turnPlayerName}'s turn`}
+            {yourTurn ? "Your Turn" : `Player${turnPlayerIndex}'s turn`}
           </Typography>
         </Box>
         <Box style={{ paddingBottom: 10 }}>
-          <PlayingCard number={pocketCards[0]} size={160} />
-          <PlayingCard number={pocketCards[1]} size={160} />
+          <PlayingCard number={pocketCards && pocketCards[0]} size={160} />
+          <PlayingCard number={pocketCards && pocketCards[1]} size={160} />
         </Box>
         <Box style={{ paddingBottom: 30 }}>
           <Typography style={{ color: "white", fontSize: 16 }}>
@@ -119,17 +119,21 @@ const ControlPanel = ({
               disabled={disabled}
               variant="contained"
               className="text"
-              onClick={() =>
-                getAxiosInstance().post(
-                  `/api/game/fold/${gameId}`,
-                  {},
-                  {
-                    headers: {
-                      playerId,
-                    },
-                  }
-                )
-              }
+              onClick={() => {
+                getAxiosInstance()
+                  .post(
+                    `/api/game/fold/${gameId}`,
+                    {},
+                    {
+                      headers: {
+                        playerId,
+                      },
+                    }
+                  )
+                  .catch((error) =>
+                    console.log(`an error occured while folding: ${error}`)
+                  );
+              }}
             >
               Fold
             </Button>
@@ -139,17 +143,21 @@ const ControlPanel = ({
               disabled={disabled}
               variant="contained"
               className="text"
-              onClick={() =>
-                getAxiosInstance().post(
-                  `/api/game/check/${gameId}`,
-                  {},
-                  {
-                    headers: {
-                      playerId,
-                    },
-                  }
-                )
-              }
+              onClick={() => {
+                getAxiosInstance()
+                  .post(
+                    `/api/game/check/${gameId}`,
+                    {},
+                    {
+                      headers: {
+                        playerId,
+                      },
+                    }
+                  )
+                  .catch((error) =>
+                    console.log(`an error occured while checking: ${error}`)
+                  );
+              }}
             >
               Check
             </Button>

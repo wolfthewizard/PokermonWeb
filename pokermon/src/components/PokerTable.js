@@ -5,7 +5,13 @@ import PlayerHand from "./PlayerHand";
 import PlayerInfo from "./PlayerInfo";
 import PlayingCard from "./PlayingCard";
 
-const PokerTable = ({ players, cards, currentPlayerPosition, potValue }) => {
+const PokerTable = ({
+  players,
+  cards,
+  currentPlayerPosition,
+  potValue,
+  isEndOfHand,
+}) => {
   return (
     <Grid
       container
@@ -20,8 +26,8 @@ const PokerTable = ({ players, cards, currentPlayerPosition, potValue }) => {
             <Grid item xs={3} key={i}>
               <PlayerInfo
                 index={i}
-                isPlaying={player.isPlaying}
-                currentCash={player.currentCash}
+                isPlaying={player?.isPlaying}
+                currentCash={player?.currentCash}
                 isOwnTurn={currentPlayerPosition === i}
                 isPresent={player !== null && player !== undefined}
               />
@@ -34,6 +40,7 @@ const PokerTable = ({ players, cards, currentPlayerPosition, potValue }) => {
             paddingBottom: 20,
             backgroundColor: "#038664",
             borderRadius: 50,
+            height: 500,
           }}
         >
           <Grid container>
@@ -41,12 +48,14 @@ const PokerTable = ({ players, cards, currentPlayerPosition, potValue }) => {
               <Grid item xs={3} key={i}>
                 <PlayerHand
                   index={i}
-                  isPlaying={player.isPlaying}
-                  isAllIn={player.isAllIn}
-                  currentCash={player.currentCash}
-                  currentBet={player.currentBet}
-                  wonCash={player.wonCash}
-                  pocketCards={player.pocketCards}
+                  isEndOfHand={isEndOfHand}
+                  isPlaying={player?.isPlaying}
+                  isAllIn={player?.isAllIn}
+                  currentCash={player?.currentCash}
+                  currentBet={player?.currentBet}
+                  wonCash={player?.wonCash}
+                  pocketCards={player?.pocketCards}
+                  isPresent={player !== null && player !== undefined}
                 />
               </Grid>
             ))}
@@ -60,9 +69,11 @@ const PokerTable = ({ players, cards, currentPlayerPosition, potValue }) => {
             style={{ marginTop: 40, marginBottom: 8 }}
           >
             <Box>
-              {cards.map((cardNum, i) => (
-                <PlayingCard number={cardNum} key={i} />
-              ))}
+              {[...Array(5).keys()]
+                .map((i) => (i > cards.length ? null : cards[i]))
+                .map((cardNum, i) => (
+                  <PlayingCard number={cardNum} key={i} />
+                ))}
             </Box>
             <Typography className="text" style={{ fontSize: 32 }}>
               {potValue ? `Pot: ${potValue}` : "⠀"}
@@ -77,12 +88,14 @@ const PokerTable = ({ players, cards, currentPlayerPosition, potValue }) => {
                 <Grid item xs={3} key={i}>
                   <PlayerHand
                     index={7 - i}
-                    isPlaying={player.isPlaying}
-                    isAllIn={player.isAllIn}
-                    currentCash={player.currentCash}
-                    currentBet={player.currentBet}
-                    wonCash={player.wonCash}
-                    pocketCards={player.pocketCards}
+                    isEndOfHand={isEndOfHand}
+                    isPlaying={player?.isPlaying}
+                    isAllIn={player?.isAllIn}
+                    currentCash={player?.currentCash}
+                    currentBet={player?.currentBet}
+                    wonCash={player?.wonCash}
+                    pocketCards={player?.pocketCards}
+                    isPresent={player !== null && player !== undefined}
                     reverse
                   />
                 </Grid>
@@ -97,8 +110,8 @@ const PokerTable = ({ players, cards, currentPlayerPosition, potValue }) => {
               <Grid item xs={3} key={i}>
                 <PlayerInfo
                   index={7 - i}
-                  isPlaying={player.isPlaying}
-                  currentCash={player.currentCash}
+                  isPlaying={player?.isPlaying}
+                  currentCash={player?.currentCash}
                   isOwnTurn={currentPlayerPosition === 7 - i}
                   isPresent={player !== null && player !== undefined}
                 />

@@ -5,12 +5,14 @@ import "../style/style.css";
 import PlayingCard from "./PlayingCard";
 
 const PlayerHand = ({
+  isEndOfHand,
   isPlaying,
   isAllIn,
   currentBet,
   wonCash,
   pocketCards,
   reverse,
+  isPresent,
 }) => {
   return (
     <Grid
@@ -19,17 +21,22 @@ const PlayerHand = ({
       justifyContent="center"
       direction={reverse ? "column" : "column-reverse"}
     >
-      {wonCash !== null && wonCash !== undefined ? (
-        <Typography className="text">won: {wonCash}</Typography>
-      ) : (
-        <Typography className="text">bet: {currentBet}</Typography>
+      {isPresent &&
+        (isEndOfHand ? (
+          <Typography className="text">won: {wonCash}</Typography>
+        ) : (
+          <Typography className="text">bet: {currentBet}</Typography>
+        ))}
+      {isPresent && !isPlaying && (
+        <Typography className="text">FOLD</Typography>
       )}
-      {!isPlaying && <Typography className="text">FOLD</Typography>}
-      {isAllIn && <Typography className="text">ALL IN</Typography>}
-      <Box>
-        <PlayingCard number={pocketCards[0]} />
-        <PlayingCard number={pocketCards[1]} />
-      </Box>
+      {isPresent && isAllIn && <Typography className="text">ALL IN</Typography>}
+      {isPresent && (
+        <Box>
+          <PlayingCard number={pocketCards && pocketCards[0]} />
+          <PlayingCard number={pocketCards && pocketCards[1]} />
+        </Box>
+      )}
     </Grid>
   );
 };

@@ -91,7 +91,7 @@ const GamePage = () => {
 
   const [cookies, _, removeCookie] = useCookies([]);
   const playerId = cookies["pokermon-uuid"];
-  const tablePosition = cookies["pokermon-table-position"];
+  const tablePosition = parseInt(cookies["pokermon-table-position"]);
   const [gameData, setGameData] = useState({
     tableCards: [],
     players: [],
@@ -101,23 +101,20 @@ const GamePage = () => {
   });
 
   const refreshGameData = () => {
-    setGameData(mockedGameResponse);
-    // getAxiosInstance()
-    //     .get(
-    //       `/api/game/${gameId}`,
-    //       {},
-    //       {
-    //         headers: {
-    //           playerId: playerId,
-    //         },
-    //       }
-    //     )
-    //     .then(({ data }) => {
-    //       console.log(data);
-    //     })
-    //     .catch((error) =>
-    //       console.log(`an error occured while refreshing game page: ${error}`)
-    //     );
+    // setGameData(mockedGameResponse);
+    getAxiosInstance()
+      .get(`/api/game/${gameId}`, {
+        headers: {
+          playerId: playerId,
+        },
+      })
+      .then(({ data }) => {
+        // console.log(data);
+        setGameData(data);
+      })
+      .catch((error) =>
+        console.log(`an error occured while refreshing game page: ${error}`)
+      );
   };
 
   useEffect(refreshGameData, []);
@@ -135,6 +132,7 @@ const GamePage = () => {
           players={gameData.players}
           currentPlayerPosition={gameData.currentPlayerPosition}
           potValue={gameData.potValue}
+          isEndOfHand={gameData.isEndOfHand}
         />
       </Grid>
       <Grid xs={4}>
@@ -143,14 +141,14 @@ const GamePage = () => {
           gameId={gameId}
           pocketCards={gameData.pocketCards}
           yourTurn={gameData.currentPlayerPosition === tablePosition}
-          turnPlayerName={gameData.players[gameData.currentPlayerPosition]}
+          turnPlayerIndex={gameData.currentPlayerPosition}
           currentCash={gameData.players[tablePosition]?.currentCash}
           currentBet={gameData.players[tablePosition]?.currentBet}
           cashToCall={gameData.cashToCall}
           disabled={
             gameData.currentPlayerPosition !== tablePosition ||
             !gameData.players[tablePosition]?.isPlaying ||
-            !gameData.players[tablePosition]?.isAllIn
+            gameData.players[tablePosition]?.isAllIn
           }
         />
         <Grid
