@@ -40,10 +40,14 @@ const PokerTable = ({
             paddingBottom: 20,
             backgroundColor: "#038664",
             borderRadius: 50,
-            height: 500,
           }}
         >
-          <Grid container>
+          <Grid
+            container
+            style={{
+              height: 150,
+            }}
+          >
             {players.slice(0, 4).map((player, i) => (
               <Grid item xs={3} key={i}>
                 <PlayerHand
@@ -66,7 +70,7 @@ const PokerTable = ({
             alignItems="center"
             justifyContent="center"
             direction="column"
-            style={{ marginTop: 40, marginBottom: 8 }}
+            style={{ marginTop: 40, marginBottom: 8, height: 200 }}
           >
             <Box>
               {[...Array(5).keys()]
@@ -80,7 +84,12 @@ const PokerTable = ({
             </Typography>
           </Grid>
 
-          <Grid container>
+          <Grid
+            container
+            style={{
+              height: 150,
+            }}
+          >
             {players
               .slice(4, 8)
               .reverse()

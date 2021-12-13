@@ -150,6 +150,7 @@ const GamePage = () => {
             !gameData.players[tablePosition]?.isPlaying ||
             gameData.players[tablePosition]?.isAllIn
           }
+          canRaise={gameData.canRaise}
         />
         <Grid
           container

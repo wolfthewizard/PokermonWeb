@@ -46,6 +46,18 @@ const ControlPanel = ({
   const classes = useStyles();
   const [betAmountString, setBetAmountString] = useState("");
 
+  const validateBetAmount = () => {
+    const isNumber =
+      !isNaN(betAmountString) && !isNaN(parseInt(betAmountString));
+    if (!isNumber) {
+      return false;
+    }
+    const betAmount = parseInt(betAmountString);
+    const isInCorrectInterval =
+      betAmount >= cashToCall && (canRaise || betAmount <= cashToCall);
+    return isInCorrectInterval;
+  };
+
   return (
     <Box style={{ marginRight: 20 }}>
       <Grid
@@ -79,36 +91,46 @@ const ControlPanel = ({
           </Typography>
         </Box>
         <Box>
-          <Typography style={{ color: "white" }}>
-            Minimum bet: {cashToCall || 0}
+          <Typography style={{ color: "white", height: 30 }}>
+            {!disabled &&
+              ((canRaise ? "Minimum bet: " : "You have to bet exactly ") +
+                cashToCall.toString() ||
+                "0")}
           </Typography>
         </Box>
         <Box style={{ paddingBottom: 10 }}>
           <TextField
+            value={betAmountString}
             onChange={({ target: { value } }) => setBetAmountString(value)}
             label="Amount"
             variant="outlined"
             className={classes.root}
             inputProps={{ style: { color: "white" } }}
+            error={!disabled && !validateBetAmount()}
           />
           <Button
-            disabled={disabled}
+            disabled={disabled || !validateBetAmount()}
             variant="contained"
             className="text"
             style={{ height: "100%" }}
-            onClick={() =>
-              getAxiosInstance().post(
-                `/api/game/bet/${gameId}`,
-                {
-                  value: parseInt(betAmountString),
-                },
-                {
-                  headers: {
-                    playerId,
+            onClick={() => {
+              setBetAmountString("");
+              getAxiosInstance()
+                .post(
+                  `/api/game/bet/${gameId}`,
+                  {
+                    value: parseInt(betAmountString),
                   },
-                }
-              )
-            }
+                  {
+                    headers: {
+                      playerId,
+                    },
+                  }
+                )
+                .catch((error) =>
+                  console.log(`an error occured while betting: ${error}`)
+                );
+            }}
           >
             Bet
           </Button>
