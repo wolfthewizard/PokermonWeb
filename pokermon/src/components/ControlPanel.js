@@ -75,7 +75,7 @@ const ControlPanel = ({
       >
         <Box>
           <Typography style={{ color: "white", fontSize: 24 }}>
-            {yourTurn ? "Your Turn" : `Player${turnPlayerIndex}'s turn`}
+            {yourTurn ? "Your Turn" : `Player${turnPlayerIndex + 1}'s turn`}
           </Typography>
         </Box>
         <Box style={{ paddingBottom: 10 }}>
@@ -106,7 +106,7 @@ const ControlPanel = ({
             variant="outlined"
             className={classes.root}
             inputProps={{ style: { color: "white" } }}
-            error={!disabled && !validateBetAmount()}
+            error={betAmountString !== "" && !disabled && !validateBetAmount()}
           />
           <Button
             disabled={disabled || !validateBetAmount()}

@@ -24,7 +24,7 @@ const PlayerInfo = ({
       }
     >
       <Typography className="text" style={{ fontWeight: "bold" }}>
-        {isPresent && `Player${index}`}
+        {isPresent && `Player${index + 1}`}
       </Typography>
       <Typography className="text">{isPresent && currentCash}</Typography>
     </Grid>
