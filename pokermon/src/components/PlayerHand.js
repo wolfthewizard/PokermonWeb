@@ -21,16 +21,16 @@ const PlayerHand = ({
       justifyContent="center"
       direction={reverse ? "column" : "column-reverse"}
     >
-      {isPresent &&
-        (isEndOfHand ? (
-          <Typography className="text">won: {wonCash}</Typography>
-        ) : (
-          <Typography className="text">bet: {currentBet}</Typography>
-        ))}
       {isPresent && !isPlaying && (
         <Typography className="text">FOLD</Typography>
       )}
       {isPresent && isAllIn && <Typography className="text">ALL IN</Typography>}
+      {isPresent &&
+        (isEndOfHand ? (
+          <Typography className="text">won: {wonCash || 0}</Typography>
+        ) : (
+          <Typography className="text">bet: {currentBet}</Typography>
+        ))}
       {isPresent && (
         <Box>
           <PlayingCard number={pocketCards && pocketCards[0]} />

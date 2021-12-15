@@ -54,7 +54,11 @@ const ControlPanel = ({
     }
     const betAmount = parseInt(betAmountString);
     const isInCorrectInterval =
-      betAmount >= cashToCall && (canRaise || betAmount <= cashToCall);
+      ((betAmount >= cashToCall &&
+        betAmount <= currentCash &&
+        cashToCall < currentCash) ||
+        betAmount === currentCash) &&
+      (canRaise || betAmount <= cashToCall);
     return isInCorrectInterval;
   };
 
@@ -93,9 +97,13 @@ const ControlPanel = ({
         <Box>
           <Typography style={{ color: "white", height: 30 }}>
             {!disabled &&
-              ((canRaise ? "Minimum bet: " : "You have to bet exactly ") +
-                cashToCall.toString() ||
-                "0")}
+              ((canRaise && cashToCall < currentCash
+                ? "Minimum bet: "
+                : "You have to bet exactly ") +
+                (cashToCall < currentCash
+                  ? cashToCall.toString()
+                  : currentCash.toString()) || "0") +
+                (cashToCall >= currentCash ? " (all in)" : "")}
           </Typography>
         </Box>
         <Box style={{ paddingBottom: 10 }}>
